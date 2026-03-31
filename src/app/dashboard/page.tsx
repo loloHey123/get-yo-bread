@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { ClockInScreen } from "@/components/clock/clock-in-screen";
 import { ClockOutScreen } from "@/components/clock/clock-out-screen";
+import { CelebrationScreen } from "@/components/friday/celebration-screen";
 import { Nav } from "@/components/nav";
 import {
   calculateWeeklyEarnings,
@@ -73,10 +74,18 @@ function DashboardContent() {
     user.expected_hours_per_week
   );
 
-  // Friday celebration will be handled by Task 7
   if (isFriday) {
-    // Placeholder — Task 7 will add CelebrationScreen import
-    return null;
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-6 pb-24">
+        <div className="w-full max-w-md">
+          <CelebrationScreen
+            weeklyEarnings={weeklyEarnings}
+            baguetteProgress={baguetteProgress}
+          />
+        </div>
+        <Nav />
+      </main>
+    );
   }
 
   return (
