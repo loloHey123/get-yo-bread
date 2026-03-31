@@ -34,6 +34,7 @@ export function getBaguetteProgress(
 }
 
 export function formatEarnings(amount: number): string {
+  if (!isFinite(amount) || isNaN(amount)) return "$0.00";
   return `$${amount.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -45,5 +46,6 @@ export function calculateLiveEarnings(
   hourlyRate: number
 ): number {
   const now = new Date();
+  if (clockInTime.getTime() > now.getTime()) return 0;
   return calculateSessionEarnings(clockInTime, now, hourlyRate);
 }

@@ -71,6 +71,6 @@ const mockBakeries: Bakery[] = [
 
 export class MockBakeryProvider implements BakeryProvider {
   async findNearby(location: string, limit: number = 5): Promise<Bakery[]> {
-    return mockBakeries.slice(0, limit);
+    return mockBakeries.slice(0, Math.max(0, limit));
   }
 }
