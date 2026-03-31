@@ -24,6 +24,8 @@ export function CelebrationScreen({
     bakeries: Bakery[];
     id?: string;
   } | null>(null);
+  const [recLoading, setRecLoading] = useState(true);
+  const [recError, setRecError] = useState(false);
 
   useEffect(() => {
     if ("vibrate" in navigator) {
@@ -31,10 +33,18 @@ export function CelebrationScreen({
     }
 
     async function loadRecommendation() {
-      const response = await fetch("/api/recommendation");
-      if (response.ok) {
-        const data = await response.json();
-        setRecommendation(data);
+      try {
+        const response = await fetch("/api/recommendation");
+        if (response.ok) {
+          const data = await response.json();
+          setRecommendation(data);
+        } else {
+          setRecError(true);
+        }
+      } catch {
+        setRecError(true);
+      } finally {
+        setRecLoading(false);
       }
     }
 
@@ -79,6 +89,18 @@ export function CelebrationScreen({
           weeklyEarnings={weeklyEarnings}
         />
       </motion.div>
+
+      {recLoading && (
+        <p className="text-center text-sm" style={{ color: "rgba(62, 39, 35, 0.5)" }}>
+          Finding your treat...
+        </p>
+      )}
+
+      {!recLoading && recError && (
+        <p className="text-center text-sm" style={{ color: "rgba(62, 39, 35, 0.5)" }}>
+          Could not load your treat right now. Check back soon!
+        </p>
+      )}
 
       {recommendation && (
         <>

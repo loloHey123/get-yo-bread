@@ -11,13 +11,15 @@ export function EmailStep({ onComplete }: EmailStepProps) {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error: otpError } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: window.location.href,
@@ -25,7 +27,9 @@ export function EmailStep({ onComplete }: EmailStepProps) {
     });
 
     setLoading(false);
-    if (!error) {
+    if (otpError) {
+      setError("Something went a-rye. Please try again.");
+    } else {
       setSent(true);
     }
   }
@@ -56,6 +60,11 @@ export function EmailStep({ onComplete }: EmailStepProps) {
         required
         className="w-full px-4 py-3 rounded-xl border-2 border-golden/30 bg-cream focus:border-golden focus:outline-none text-lg"
       />
+      {error && (
+        <p role="alert" className="text-sm text-center" style={{ color: "#C62828" }}>
+          {error}
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}

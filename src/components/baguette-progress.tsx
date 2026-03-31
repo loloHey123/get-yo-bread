@@ -12,8 +12,9 @@ export function BaguetteProgress({
   progress,
   weeklyEarnings,
 }: BaguetteProgressProps) {
-  const widthPercent = Math.min(progress * 100, 150);
-  const isOvertime = progress > 1;
+  const safeProgress = isFinite(progress) && !isNaN(progress) ? progress : 0;
+  const widthPercent = Math.min(safeProgress * 100, 150);
+  const isOvertime = safeProgress > 1;
 
   return (
     <div className="space-y-3">

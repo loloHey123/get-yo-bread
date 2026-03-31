@@ -21,8 +21,10 @@ export function DoughRising({ clockInTime, hourlyRate }: DoughRisingProps) {
     return () => clearInterval(interval);
   }, [clockInTime, hourlyRate]);
 
-  const hoursWorked =
-    (Date.now() - clockInTime.getTime()) / (1000 * 60 * 60);
+  const hoursWorked = Math.max(
+    (Date.now() - clockInTime.getTime()) / (1000 * 60 * 60),
+    0
+  );
   const scale = Math.min(1 + hoursWorked * 0.1, 2);
 
   return (

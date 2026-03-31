@@ -12,7 +12,10 @@ export function RateStep({ onComplete }: RateStepProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onComplete(parseFloat(hourlyRate), parseFloat(expectedHours));
+    const rate = parseFloat(hourlyRate);
+    const hours = parseFloat(expectedHours);
+    if (!isFinite(rate) || rate <= 0 || !isFinite(hours) || hours <= 0) return;
+    onComplete(rate, hours);
   }
 
   return (

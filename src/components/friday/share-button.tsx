@@ -28,10 +28,14 @@ export function ShareButton({ item, recommendationId }: ShareButtonProps) {
       } catch {
         // User cancelled share
       }
-    } else {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    } else if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        // Clipboard write failed silently
+      }
     }
 
     if ("vibrate" in navigator) {
