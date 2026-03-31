@@ -48,8 +48,8 @@ export function PreferencesStep({ onComplete }: PreferencesStepProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-crust">What's your taste?</h2>
-        <p className="text-chocolate/70">Pick your favorites. We'll match your Friday treats.</p>
+        <h2 className="text-2xl font-bold text-crust">What&apos;s your taste?</h2>
+        <p className="text-chocolate/70">Pick your favorites. We&apos;ll match your Friday treats.</p>
       </div>
 
       <div>
@@ -76,7 +76,7 @@ export function PreferencesStep({ onComplete }: PreferencesStepProps) {
 
       <div>
         <label className="block text-sm font-medium text-chocolate/70 mb-2">
-          Allergies (so we don't recommend anything harmful)
+          Allergies (so we don&apos;t recommend anything harmful)
         </label>
         <div className="flex flex-wrap gap-2 mb-3">
           {ALLERGY_OPTIONS.map((allergy) => (
@@ -107,7 +107,7 @@ export function PreferencesStep({ onComplete }: PreferencesStepProps) {
         type="submit"
         className="w-full py-3 rounded-xl bg-crust text-cream font-bold text-lg hover:bg-crust/90 transition-colors"
       >
-        Let's get this bread!
+        Let&apos;s get this bread!
       </button>
     </form>
   );

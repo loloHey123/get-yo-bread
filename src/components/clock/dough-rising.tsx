@@ -13,19 +13,25 @@ export function DoughRising({ clockInTime, hourlyRate }: DoughRisingProps) {
   const [earnings, setEarnings] = useState(
     calculateLiveEarnings(clockInTime, hourlyRate)
   );
+  const [scale, setScale] = useState(() => {
+    const hoursWorked = Math.max(
+      (Date.now() - clockInTime.getTime()) / (1000 * 60 * 60),
+      0
+    );
+    return Math.min(1 + hoursWorked * 0.1, 2);
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
       setEarnings(calculateLiveEarnings(clockInTime, hourlyRate));
+      const hoursWorked = Math.max(
+        (Date.now() - clockInTime.getTime()) / (1000 * 60 * 60),
+        0
+      );
+      setScale(Math.min(1 + hoursWorked * 0.1, 2));
     }, 1000);
     return () => clearInterval(interval);
   }, [clockInTime, hourlyRate]);
-
-  const hoursWorked = Math.max(
-    (Date.now() - clockInTime.getTime()) / (1000 * 60 * 60),
-    0
-  );
-  const scale = Math.min(1 + hoursWorked * 0.1, 2);
 
   return (
     <div className="flex flex-col items-center space-y-6">

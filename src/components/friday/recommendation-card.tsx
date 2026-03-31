@@ -22,7 +22,7 @@ export function RecommendationCard({
       style={{ backgroundColor: "#FFF8DC", borderColor: "rgba(244, 164, 96, 0.3)" }}
     >
       <p className="text-sm font-medium text-center" style={{ color: "#F4A460" }}>
-        This week's treat
+        This week&apos;s treat
       </p>
 
       <div className="flex flex-col items-center space-y-3">

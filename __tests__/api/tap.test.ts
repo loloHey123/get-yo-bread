@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   determineTapAction,
   type TapContext,
-  type TapResult,
 } from "@/app/api/tap/[breadId]/route";
 
 describe("determineTapAction", () => {

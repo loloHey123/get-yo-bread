@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { CuratedItem } from "@/lib/types";
 import { MockBakeryProvider } from "@/lib/bakery/mock-provider";
@@ -31,7 +31,7 @@ export function pickRecommendation(
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const supabase = await createClient();
 
   const {

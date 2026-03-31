@@ -17,7 +17,7 @@ export function CompleteStep() {
       >
         🍞
       </motion.div>
-      <h2 className="text-3xl font-bold text-crust">You're all set!</h2>
+      <h2 className="text-3xl font-bold text-crust">You&apos;re all set!</h2>
       <p className="text-xl text-chocolate/70">
         Tap your bread to start earning.
       </p>

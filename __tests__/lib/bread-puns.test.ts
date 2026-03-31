@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getRandomPun, PunContext } from "@/lib/bread-puns";
+import { getRandomPun } from "@/lib/bread-puns";
 
 describe("getRandomPun", () => {
   it("returns a string for clock_in context", () => {

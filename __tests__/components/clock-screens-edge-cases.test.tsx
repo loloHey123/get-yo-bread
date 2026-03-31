@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ClockInScreen } from "@/components/clock/clock-in-screen";
 import { ClockOutScreen } from "@/components/clock/clock-out-screen";

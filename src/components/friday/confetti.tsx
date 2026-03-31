@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 interface Particle {
@@ -9,23 +9,26 @@ interface Particle {
   color: string;
   delay: number;
   size: number;
+  rotate: number;
+  duration: number;
 }
 
 const COLORS = ["#F4A460", "#FFD700", "#8B4513", "#FFF8DC", "#DEB887", "#C62828"];
 
-export function Confetti() {
-  const [particles, setParticles] = useState<Particle[]>([]);
+function createParticles(): Particle[] {
+  return Array.from({ length: 50 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    delay: Math.random() * 0.5,
+    size: Math.random() * 8 + 4,
+    rotate: Math.random() * 720 - 360,
+    duration: 2 + Math.random() * 2,
+  }));
+}
 
-  useEffect(() => {
-    const newParticles: Particle[] = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      delay: Math.random() * 0.5,
-      size: Math.random() * 8 + 4,
-    }));
-    setParticles(newParticles);
-  }, []);
+export function Confetti() {
+  const [particles] = useState<Particle[]>(createParticles);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -44,10 +47,10 @@ export function Confetti() {
           animate={{
             y: typeof window !== "undefined" ? window.innerHeight + 20 : 800,
             opacity: [1, 1, 0],
-            rotate: Math.random() * 720 - 360,
+            rotate: p.rotate,
           }}
           transition={{
-            duration: 2 + Math.random() * 2,
+            duration: p.duration,
             delay: p.delay,
             ease: "easeIn",
           }}

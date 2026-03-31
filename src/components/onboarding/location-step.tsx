@@ -19,7 +19,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold text-crust">Where do you loaf around?</h2>
         <p className="text-chocolate/70">
-          We'll use this to find bakeries near you for your Friday treat.
+          We&apos;ll use this to find bakeries near you for your Friday treat.
         </p>
       </div>
       <input

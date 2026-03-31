@@ -7,7 +7,8 @@ interface EmailStepProps {
   onComplete: () => void;
 }
 
-export function EmailStep({ onComplete }: EmailStepProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function EmailStep(_props: EmailStepProps) {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);

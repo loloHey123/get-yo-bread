@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -76,18 +77,18 @@ export default async function SharePage({ params }: SharePageProps) {
 
         <div className="space-y-2">
           <p className="text-lg font-medium" style={{ color: "#8B4513" }}>
-            Let's celebrate Friday together! 🍞
+            Let&apos;s celebrate Friday together! 🍞
           </p>
           <p className="text-sm" style={{ color: "rgba(62, 39, 35, 0.5)" }}>
             Want your own Friday bread recommendations?
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block mt-2 px-6 py-3 rounded-xl font-bold transition-colors"
             style={{ backgroundColor: "#8B4513", color: "#FFF8DC" }}
           >
             Get Yo Bread
-          </a>
+          </Link>
         </div>
       </div>
     </main>
