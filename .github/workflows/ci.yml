@@ -65,3 +65,121 @@ jobs:
 
       - name: Type check
         run: npx tsc --noEmit
+
+  claude-review:
+    name: Claude Code — Review, Test, Fix & Verify
+    runs-on: ubuntu-latest
+    needs: [test, build, lint]
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Claude Code — Review, Test, Fix & Verify
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Get the diff for this push
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            DIFF=$(git diff ${{ github.event.pull_request.base.sha }}..HEAD)
+          else
+            DIFF=$(git diff HEAD~1..HEAD 2>/dev/null || git diff --staged)
+          fi
+
+          claude -p "You are a ruthless CI agent for the Get Yo Bread app (Next.js + Supabase + TypeScript + Vitest).
+
+          Here is the git diff for the latest push:
+
+          \`\`\`
+          $DIFF
+          \`\`\`
+
+          Your job has 4 phases. Complete ALL of them.
+
+          ## Phase 1: REVIEW
+          Read every changed file in full (not just the diff). Look for:
+          - Bugs, logic errors, off-by-one errors
+          - Security issues (XSS, injection, exposed secrets)
+          - Broken imports or missing dependencies
+          - Race conditions, unhandled promise rejections
+          - Incorrect types or type assertions that hide bugs
+
+          ## Phase 2: FIX
+          Fix any bugs or issues you found in Phase 1. This includes:
+          - Broken logic that would fail at runtime
+          - Missing null/undefined checks at system boundaries (API inputs, URL params, DB responses)
+          - Incorrect calculations or comparisons
+          - Error states that crash instead of showing a friendly message
+          Do NOT refactor working code or add unnecessary abstractions. Only fix actual bugs.
+
+          ## Phase 3: TEST EDGE CASES & UNHAPPY PATHS
+          For every changed function, component, and API route, write thorough tests covering:
+
+          **Edge cases:**
+          - Empty inputs, null, undefined
+          - Zero values, negative numbers, extremely large numbers
+          - Empty arrays, single-item arrays
+          - Boundary conditions (exactly 0, exactly 1, max value)
+          - Unicode, special characters in strings
+
+          **Unhappy paths:**
+          - Invalid input types
+          - Network failures / API errors
+          - Missing database records
+          - Unauthorized access attempts
+          - Duplicate operations (double-tap, double-submit)
+          - Expired sessions, missing cookies
+          - Concurrent modifications
+
+          **For UI components:**
+          - Loading states
+          - Error states
+          - Empty states
+          - Overflow text / long content
+
+          Follow existing patterns in __tests__/. Use vitest and @testing-library/react.
+
+          ## Phase 4: VERIFY
+          Run 'npm test' to make sure ALL tests pass (existing + new).
+          If any test fails:
+          1. Read the error carefully
+          2. Determine if the test is wrong or the source code is wrong
+          3. Fix whichever is actually broken
+          4. Run 'npm test' again
+          5. Repeat until all tests pass
+
+          After all tests pass, run 'npm run build' to verify the build still succeeds.
+
+          ## When done
+          Commit all changes (fixes + tests) with descriptive messages:
+          - Bug fixes: 'fix: [description of what was broken]'
+          - New tests: 'test: add edge case and unhappy path tests for [area]'
+
+          Do NOT skip any phase. Be thorough. Be paranoid. Find the bugs before users do." --allowedTools "Bash,Read,Write,Edit,Glob,Grep"
+
+      - name: Push fixes and tests
+        run: |
+          git config user.name "Claude CI"
+          git config user.email "claude-ci@noreply.anthropic.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git diff --cached --stat
+            git commit -m "ci: Claude review — fixes and edge case tests" || true
+            git push || true
+          else
+            echo "No changes to push — all clean."
+          fi
