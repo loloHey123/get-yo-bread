@@ -13,14 +13,26 @@ export interface OnboardingData {
 export function validateOnboardingData(
   data: OnboardingData
 ): { valid: true } | { valid: false; error: string } {
-  if (!data.breadId) {
+  if (!data.breadId || typeof data.breadId !== "string") {
     return { valid: false, error: "Bread ID is required" };
   }
-  if (!data.hourlyRate || data.hourlyRate <= 0) {
+  if (
+    typeof data.hourlyRate !== "number" ||
+    Number.isNaN(data.hourlyRate) ||
+    data.hourlyRate <= 0
+  ) {
     return { valid: false, error: "Hourly rate must be positive" };
   }
-  if (!data.expectedHoursPerWeek || data.expectedHoursPerWeek <= 0) {
-    return { valid: false, error: "Expected hours must be positive" };
+  if (
+    typeof data.expectedHoursPerWeek !== "number" ||
+    Number.isNaN(data.expectedHoursPerWeek) ||
+    data.expectedHoursPerWeek <= 0 ||
+    data.expectedHoursPerWeek > 168
+  ) {
+    return {
+      valid: false,
+      error: "Expected hours must be between 1 and 168 per week",
+    };
   }
   return { valid: true };
 }

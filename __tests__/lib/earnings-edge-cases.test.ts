@@ -182,13 +182,13 @@ describe("calculateLiveEarnings — edge cases", () => {
     expect(result).toBe(0);
   });
 
-  it("returns a negative value when clockIn is in the future (bug coverage)", () => {
+  it("returns 0 when clockIn is in the future (guarded against negative earnings)", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-03-30T09:00:00Z"));
     const futureClockIn = new Date("2026-03-30T10:00:00Z");
-    // Future clock-in means now < clockIn → negative duration → negative earnings
+    // calculateLiveEarnings guards against future clock-in by returning 0
     const result = calculateLiveEarnings(futureClockIn, 50);
-    expect(result).toBeLessThan(0);
+    expect(result).toBe(0);
   });
 
   it("handles zero hourly rate", () => {
