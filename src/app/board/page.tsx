@@ -31,7 +31,10 @@ export default function BoardPage() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       const { data: entries } = await supabase
         .from("time_entries")

@@ -23,6 +23,7 @@ function DashboardContent() {
   const [weekEntries, setWeekEntries] = useState<TimeEntry[]>([]);
   const [latestEntry, setLatestEntry] = useState<TimeEntry | null>(null);
   const [loading, setLoading] = useState(true);
+  const [noAuth, setNoAuth] = useState(false);
 
   const supabase = createClient();
 
@@ -31,7 +32,11 @@ function DashboardContent() {
       const {
         data: { user: authUser },
       } = await supabase.auth.getUser();
-      if (!authUser) return;
+      if (!authUser) {
+        setLoading(false);
+        setNoAuth(true);
+        return;
+      }
 
       const { data: userData } = await supabase
         .from("users")
@@ -57,10 +62,27 @@ function DashboardContent() {
     loadData();
   }, [supabase]);
 
-  if (loading || !user) {
+  if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center">
         <p className="text-xl" style={{ color: "#F4A460" }}>Loading your dough...</p>
+      </main>
+    );
+  }
+
+  if (noAuth || !user) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+        <div className="space-y-4">
+          <p className="text-6xl">🍞</p>
+          <h1 className="text-3xl font-bold" style={{ color: "#8B4513" }}>
+            Tap your bread to get started
+          </h1>
+          <p style={{ color: "rgba(62, 39, 35, 0.6)" }}>
+            You&apos;re not logged in yet. Tap your NFC bread to set up your account.
+          </p>
+        </div>
+        <Nav />
       </main>
     );
   }
