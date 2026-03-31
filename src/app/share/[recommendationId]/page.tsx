@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 interface SharePageProps {
   params: Promise<{ recommendationId: string }>;
 }
